@@ -2,15 +2,23 @@
 {
     public static class ThemeExtensions
     {
-        public const string ColorLight = "#c1e0f8";
-        public const string ColorWhite = "#ffffff";
-        public const string ColorDark = "#c22d1d";
-        public const string ColorPrimary = "#cc4979";
-        public const string ColorSecondary = "#576a73";
-        public const string ColorInfo = "#6ba24f";
-        public const string ColorSuccess = "#34a87b";
-        public const string ColorWarning = "#d4d231";
-        public const string ColorDanger = "#de471b";
+        public static string ColorLight => _themeModel.ColorLight;
+        public static string ColorWhite => _themeModel.ColorWhite;
+        public static string ColorDark => _themeModel.ColorDark;
+        public static string ColorPrimary => _themeModel.ColorPrimary;
+        public static string ColorSecondary => _themeModel.ColorSecondary;
+        public static string ColorInfo => _themeModel.ColorInfo;
+        public static string ColorSuccess => _themeModel.ColorSuccess;
+        public static string ColorWarning => _themeModel.ColorWarning;
+        public static string ColorDanger => _themeModel.ColorDanger;
+
+        private static ThemeModel _themeModel = new ThemeModel();
+
+
+        internal  static void Initialize( ThemeModel themeModel)
+        {
+            _themeModel = themeModel;
+        } 
 
         public static ANSIString Light(this string text)
         {
@@ -52,7 +60,7 @@
             return text.Color(ColorWarning);
         }
 
-        public static ANSIString NotFuckingAround(this string text)
+        public static ANSIString Danger(this string text)
         {
             return text.Color(ColorDanger);
         }

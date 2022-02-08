@@ -47,6 +47,7 @@ namespace YouReplMe.Models
 
             return this;
         }
+       
 
         public CommandHelpTextBuilder<TVerb> Parameters(Action<CommandHelpText<TVerb>, ParameterHelpTextBuilder<TVerb>> action)
         {

@@ -50,7 +50,7 @@ namespace YouReplMe
                     var action = ActionFactory.GetActionByKey(command.Action);
                     if (action == null)
                     {
-                        Console.WriteLine("Invalid action " + command.Action.NotFuckingAround());
+                        Console.WriteLine("Invalid action " + command.Action.Danger());
                         return;
                     }
                     try
@@ -59,7 +59,7 @@ namespace YouReplMe
                     }
                     catch (Exception ex)
                     {
-                        Console.WriteLine(ex.Message.NotFuckingAround());
+                        Console.WriteLine(ex.Message.Danger());
                     }
 
                     Console.WriteLine("");
@@ -67,7 +67,7 @@ namespace YouReplMe
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message.NotFuckingAround());
+                Console.WriteLine(ex.Message.Danger());
             }
         }
     }

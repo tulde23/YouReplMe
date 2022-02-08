@@ -3,6 +3,7 @@ using ReplAfterMe;
 
 var builder = Host.CreateDefaultBuilder(args)
                          .AddAppConfiguration()
+                         .InitializeTheme(YouReplMe.Themes.ThemeNames.Greyson)
                          .ConfigureDependencyScanning("ReplAfterMe");
 
 var tokenSource = new CancellationTokenSource();

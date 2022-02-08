@@ -14,9 +14,13 @@ namespace ReplAfterMe.Actions
     internal class DisplayLocalForecastAction : AbstractAction<DisplayLocalForecastVerb>
     {
         public const string Key = "weather";
+        private readonly IPrompt prompt;
+        private readonly IConfirmableOperation confirmableOperation;
 
-        public DisplayLocalForecastAction(IHelpTextBuilderFactory helpTextBuilderFactory) : base(helpTextBuilderFactory)
+        public DisplayLocalForecastAction(IHelpTextBuilderFactory helpTextBuilderFactory, IPrompt prompt, IConfirmableOperation confirmableOperation) : base(helpTextBuilderFactory)
         {
+            this.prompt = prompt;
+            this.confirmableOperation = confirmableOperation;
         }
 
         public override string ActionName => Key;
@@ -39,28 +43,30 @@ namespace ReplAfterMe.Actions
         protected override async Task RunAsync(DisplayLocalForecastVerb verb, CancellationToken cancellationToken)
         {
             var geocoords = await GeocodeZip(verb.For);
-
-            var lat = geocoords.lat;
-            var lon = geocoords.lon;
-            var key = "54313fd2b57e211810fd03e9518fd427";
-            var endpoint = $"https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={key}&units=imperial";
-            using (var client = new HttpClient())
-            {
-                var data = await client.GetStringAsync(endpoint);
-                var forecast = JsonConvert.DeserializeObject<WeatherForecast>(data);
-                forecast.Print();
-            }
+            await this.confirmableOperation.ConfirmAsync(() => prompt.Prompt("Continue", "yes"), async () =>
+           {
+               var lat = geocoords.lat;
+               var lon = geocoords.lon;
+               var key = "54313fd2b57e211810fd03e9518fd427";
+               var endpoint = $"https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={key}&units=imperial";
+               using (var client = new HttpClient())
+               {
+                   var data = await client.GetStringAsync(endpoint);
+                   var forecast = JsonConvert.DeserializeObject<WeatherForecast>(data);
+                   forecast.Print();
+               }
+           }
+            );
         }
 
         private async Task<(double lat, double lon)> GeocodeZip(string zipCode)
         {
-            var url = "https://www.melissa.com/v2/lookups/geocoder/address/?address="+zipCode;
+            var url = "https://www.melissa.com/v2/lookups/geocoder/address/?address=" + zipCode;
             var web = new HtmlWeb();
             var doc = await web.LoadFromWebAsync(url);
             var htmlTable = doc.GetElementbyId("tableInfo50");
             double lat = 33.7737;
             double lon = -84.2933;
-
 
             return (
                 lat, lon

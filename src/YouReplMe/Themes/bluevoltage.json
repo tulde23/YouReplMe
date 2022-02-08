@@ -1,0 +1,11 @@
+﻿{
+  "ColorLight": "#eef0f2",
+  "ColorWhite": "#ffffff",
+  "ColorDark": "#000633",
+  "ColorPrimary": "#1633ff",
+  "ColorSecondary": "#a0b7bc",
+  "ColorInfo": "#7ebcfa",
+  "ColorSuccess": "#1633ff",
+  "ColorWarning": "#00f900",
+  "ColorDanger": "#00f900"
+}

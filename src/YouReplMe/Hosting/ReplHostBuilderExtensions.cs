@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
+using YouReplMe.Themes;
 
 namespace Microsoft.Extensions.Hosting
 {
@@ -30,6 +31,12 @@ namespace Microsoft.Extensions.Hosting
             AssemblySearchPatternFactory.Merge(AssemblyPaths.From(assemblyPatterns), factory);
             builder.ConfigureServices(services => services.AddYouReplMeDependencies());
             return builder.UseAutoFacContainer(factory);
+        }
+
+        public static IHostBuilder InitializeTheme(this IHostBuilder builder, ThemeNames themeNames = ThemeNames.Default, string pathToTheme = null)
+        {
+            ThemeExtensions.Initialize(ThemeProvider.GetTheme(themeNames, pathToTheme));
+            return builder;
         }
 
         public static async ValueTask StartRepLoop(this IHostBuilder hostBuilder,

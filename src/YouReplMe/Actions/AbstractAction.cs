@@ -18,19 +18,30 @@
             this.helpTextBuilderFactory = helpTextBuilderFactory;
         }
 
-        public CommandHelpText GetHelpText()
+        public virtual CommandHelpText GetHelpText()
         {
             var builder = new CommandHelpTextBuilder<T>();
             var helpText = this.GetHelpTextForVerb(builder);
             return helpText;
         }
 
-        public abstract CommandHelpText<T> GetHelpTextForVerb(CommandHelpTextBuilder<T> builder);
+        public virtual CommandHelpText<T> GetHelpTextForVerb(CommandHelpTextBuilder<T> builder)
+        {
+            return builder
+             .Parameters((text, p) => p.FromVerb())
+             .Examples((text, e) => e.FromVerb())
+             .Options((text, o) => o.FromVerb())
+             .CommandUsage(this)
+             .CommandName(ActionName)
+             .CommandDescription()
+             .Build();
+        }
 
         public virtual RegexBuilder<T> GetRegexBuilder()
         {
             var builder = new RegexBuilder<T>();
             builder.SetAction(this.ActionName);
+
             return BuildRegex(builder);
         }
 
@@ -41,6 +52,7 @@
         public async Task RunAsync(string commandLine, CancellationToken cancellationToken)
         {
             var builder = GetRegexBuilder();
+            builder =  builder.Options();
             CommandLineArguments args = builder.ToRegex();
             var verb = args.ToVerb<T>(commandLine);
 
